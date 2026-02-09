@@ -1,4 +1,4 @@
-package com.ensistec.ifood.api;
+package com.ifood;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
