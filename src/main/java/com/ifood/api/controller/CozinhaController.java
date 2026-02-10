@@ -1,11 +1,13 @@
 package com.ifood.api.controller;
 
+import com.ifood.domain.exception.EntityInUseException;
+import com.ifood.domain.exception.EntityNotFoundException;
 import com.ifood.domain.model.Cozinha;
 import com.ifood.domain.repository.CozinhaRepository;
 import com.ifood.domain.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,19 +62,16 @@ public class CozinhaController {
 	}
 
 	@DeleteMapping("/{cozinhaId}")
-	public ResponseEntity<Cozinha> deletar(@PathVariable long cozinhaId) {
+	public ResponseEntity<Cozinha> excluir(@PathVariable long cozinhaId) {
 
 		try {
-			Cozinha cozinha = repository.buscar(cozinhaId);
+			cadastro.excluir(cozinhaId);
+			return ResponseEntity.noContent().build();
 
-			if (cozinha != null) {
-				repository.remover(cozinha);
-				return ResponseEntity.noContent().build();
-			} else {
-				return ResponseEntity.notFound().build();
-			}
+		} catch (EntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
 
-		} catch (DataIntegrityViolationException e) {
+		} catch (EntityInUseException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
 	}
