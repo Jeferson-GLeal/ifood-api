@@ -54,4 +54,22 @@ public class CozinhaController {
 		}
 		return ResponseEntity.notFound().build();
 	}
+
+	@DeleteMapping("/{cozinhaId}")
+	public ResponseEntity<Cozinha> deletar(@PathVariable long cozinhaId) {
+
+		try {
+			Cozinha cozinha = repository.buscar(cozinhaId);
+
+			if (cozinha != null) {
+				repository.remover(cozinha);
+				return ResponseEntity.noContent().build();
+			} else {
+				return ResponseEntity.notFound().build();
+			}
+
+		} catch (DataIntegrityViolationException e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		}
+	}
 }
