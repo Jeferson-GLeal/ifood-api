@@ -2,6 +2,7 @@ package com.ifood.api.controller;
 
 import com.ifood.domain.model.Cozinha;
 import com.ifood.domain.repository.CozinhaRepository;
+import com.ifood.domain.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,6 +18,9 @@ public class CozinhaController {
 
 	@Autowired
 	private CozinhaRepository repository;
+
+	@Autowired
+	private CadastroCozinhaService cadastro;
 
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping
@@ -36,7 +40,7 @@ public class CozinhaController {
 
 	@PostMapping
 	public void adicionar(@RequestBody	 Cozinha cozinha) {
-		Cozinha cozinhaSalva = repository.salvar(cozinha);
+		Cozinha cozinhaSalva = cadastro.salvar(cozinha);
 		ResponseEntity.status(HttpStatus.CREATED).body(cozinhaSalva);
 	}
 
