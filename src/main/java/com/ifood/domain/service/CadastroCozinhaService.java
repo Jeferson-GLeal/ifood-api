@@ -9,14 +9,25 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CadastroCozinhaService {
 
     @Autowired
     private CozinhaRepository repository;
 
-    public Cozinha salvar(Cozinha cozinha) {
-        return repository.salvar(cozinha);
+    public List<Cozinha> listar() {
+        return repository.listar();
+    }
+
+    public Cozinha buscar(long id) {
+        Cozinha cozinha = repository.buscar(id);
+        return cozinha;
+    }
+
+    public void adicionar(Cozinha cozinha) {
+        repository.salvar(cozinha);
     }
 
     public void excluir(Long cozinhaId) {
@@ -32,4 +43,6 @@ public class CadastroCozinhaService {
                     String.format("Cozinha de codigo %d nao pode ser removida, pois esta em uso!", cozinhaId));
         }
     }
+
+
 }

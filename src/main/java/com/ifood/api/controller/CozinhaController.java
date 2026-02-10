@@ -3,11 +3,9 @@ package com.ifood.api.controller;
 import com.ifood.domain.exception.EntityInUseException;
 import com.ifood.domain.exception.EntityNotFoundException;
 import com.ifood.domain.model.Cozinha;
-import com.ifood.domain.repository.CozinhaRepository;
 import com.ifood.domain.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,20 +17,17 @@ import java.util.List;
 public class CozinhaController {
 
 	@Autowired
-	private CozinhaRepository repository;
-
-	@Autowired
 	private CadastroCozinhaService cadastro;
 
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping
 	public ResponseEntity<List<Cozinha>> listar() {
-		return ResponseEntity.status(HttpStatus.OK).body(repository.listar());
+		return ResponseEntity.status(HttpStatus.OK).body(cadastro.listar());
 	}
 
 	@GetMapping("/{cozinhaId}")
 	public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaId) {
-		Cozinha cozinha = repository.buscar(cozinhaId);
+		Cozinha cozinha = cadastro.buscar(cozinhaId);
 
 		if (cozinha != null) {
 			return ResponseEntity.status(HttpStatus.OK).body(cozinha);
@@ -42,20 +37,19 @@ public class CozinhaController {
 
 	@PostMapping
 	public void adicionar(@RequestBody	 Cozinha cozinha) {
-		Cozinha cozinhaSalva = cadastro.salvar(cozinha);
-		ResponseEntity.status(HttpStatus.CREATED).body(cozinhaSalva);
+		cadastro.adicionar(cozinha);
 	}
 
 	@PutMapping("/{cozinhaId}")
 	public ResponseEntity<Cozinha> atualizar(@PathVariable long cozinhaId, @RequestBody Cozinha cozinha) {
-		Cozinha cozinhaAtual = repository.buscar(cozinhaId);
+		Cozinha cozinhaAtual = cadastro.buscar(cozinhaId);
 
 		if (cozinhaAtual != null) {
 			/**
 			 * O BeanUtils faz a copia das propriedades de um objeto para outro, ignorando o campo id.
 			 */
 			BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
-			repository.salvar(cozinhaAtual);
+			cadastro.adicionar(cozinhaAtual);
 			return ResponseEntity.ok(cozinhaAtual);
 		}
 		return ResponseEntity.notFound().build();
