@@ -39,4 +39,19 @@ public class CozinhaController {
 		Cozinha cozinhaSalva = repository.salvar(cozinha);
 		ResponseEntity.status(HttpStatus.CREATED).body(cozinhaSalva);
 	}
+
+	@PutMapping("/{cozinhaId}")
+	public ResponseEntity<Cozinha> atualizar(@PathVariable long cozinhaId, @RequestBody Cozinha cozinha) {
+		Cozinha cozinhaAtual = repository.buscar(cozinhaId);
+
+		if (cozinhaAtual != null) {
+			/**
+			 * O BeanUtils faz a copia das propriedades de um objeto para outro, ignorando o campo id.
+			 */
+			BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
+			repository.salvar(cozinhaAtual);
+			return ResponseEntity.ok(cozinhaAtual);
+		}
+		return ResponseEntity.notFound().build();
+	}
 }
