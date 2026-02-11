@@ -32,7 +32,7 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
 	
 	@Transactional
 	@Override
-	public Cozinha salvar(Cozinha cozinha) {
+	public Cozinha adicionar(Cozinha cozinha) {
 		return manager.merge(cozinha);
 	}
 	

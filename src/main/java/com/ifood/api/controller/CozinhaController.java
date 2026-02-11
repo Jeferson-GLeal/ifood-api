@@ -44,19 +44,17 @@ public class CozinhaController {
 	public ResponseEntity<Cozinha> atualizar(@PathVariable long cozinhaId, @RequestBody Cozinha cozinha) {
 		Cozinha cozinhaAtual = cadastro.buscar(cozinhaId);
 
-		if (cozinhaAtual != null) {
-			/**
-			 * O BeanUtils faz a copia das propriedades de um objeto para outro, ignorando o campo id.
-			 */
-			BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
-			cadastro.adicionar(cozinhaAtual);
-			return ResponseEntity.ok(cozinhaAtual);
+		if (cozinhaAtual == null) {
+			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.notFound().build();
+
+		BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
+		cadastro.adicionar(cozinhaAtual);
+		return ResponseEntity.ok(cozinhaAtual);
 	}
 
 	@DeleteMapping("/{cozinhaId}")
-	public ResponseEntity<Cozinha> excluir(@PathVariable long cozinhaId) {
+	public ResponseEntity<Cozinha> excluir(@PathVariable Long cozinhaId) {
 
 		try {
 			cadastro.excluir(cozinhaId);
