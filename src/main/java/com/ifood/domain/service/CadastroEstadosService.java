@@ -29,5 +29,18 @@ public class CadastroEstadosService {
         return estadoRepository.adicionar(estado);
     }
 
+    public void excluir(Long id) {
+        try {
+            estadoRepository.remover(id);
+
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntityNotFoundException(
+                    String.format("Cacastro de Estado com o codigo %d inexistente!", id));
+
+        } catch (DataIntegrityViolationException e) {
+            throw new EntityInUseException(
+                    String.format("Estado de codigo %d nao pode ser removido, pois estas em uso!", id));
+        }
+    }
 
 }
