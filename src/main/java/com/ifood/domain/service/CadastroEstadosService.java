@@ -13,7 +13,7 @@ public class CadastroEstadosService {
     @Autowired
     private EstadoRepository estadoRepository;
 
-    public List<Estado> listar() {
-       return estadoRepository.listar();
-    }
+    public List<Estado> listar() { return estadoRepository.listar(); }
+
+    public Estado buscar(Long id) { return estadoRepository.buscar(id); }
 }
