@@ -21,9 +21,6 @@ public class RestauranteController {
     @Autowired
     private CadastroRestauranteService cadastro;
 
-    @Autowired
-    private CozinhaRepository repository;
-
     @GetMapping
     public List<Restaurante> listar() {
         return cadastro.listar();
@@ -54,7 +51,7 @@ public class RestauranteController {
         if (restauranteAtual != null) {
             BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
             cadastro.adicionar(restauranteAtual);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }

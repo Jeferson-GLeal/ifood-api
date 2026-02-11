@@ -1,17 +1,15 @@
 package com.ifood.domain.model;
 
-import java.math.BigDecimal;
-
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.math.BigDecimal;
+
 @Data
 @Entity
-//@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@JsonPropertyOrder({ "id", "nome", "taxaFrete", "cozinha" })
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+//@JsonPropertyOrder({ "id", "nome", "taxaFrete", "cozinha" })
 public class Restaurante {
 
 	@EqualsAndHashCode.Include
