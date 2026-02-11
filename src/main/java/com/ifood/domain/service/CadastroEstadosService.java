@@ -16,4 +16,7 @@ public class CadastroEstadosService {
     public List<Estado> listar() { return estadoRepository.listar(); }
 
     public Estado buscar(Long id) { return estadoRepository.buscar(id); }
+
+    public Estado adicionar(Estado estado) {
+        return estadoRepository.adicionar(estado); }
 }

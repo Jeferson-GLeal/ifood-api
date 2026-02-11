@@ -30,7 +30,7 @@ public class EstadoRepositoryImpl implements EstadoRepository {
 	
 	@Transactional
 	@Override
-	public Estado salvar(Estado estado) {
+	public Estado adicionar(Estado estado) {
 		return manager.merge(estado);
 	}
 	
