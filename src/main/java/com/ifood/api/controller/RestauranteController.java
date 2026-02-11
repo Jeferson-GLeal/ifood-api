@@ -52,7 +52,8 @@ public class RestauranteController {
     public ResponseEntity<Restaurante> atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
         Restaurante restauranteAtual = cadastro.buscar(id);
         if (restauranteAtual != null) {
-            BeanUtils.copyProperties(restaurante, restauranteAtual);
+            BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
+            cadastro.adicionar(restauranteAtual);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
