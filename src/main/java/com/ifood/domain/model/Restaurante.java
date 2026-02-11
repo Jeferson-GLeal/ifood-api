@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+//@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonPropertyOrder({ "id", "nome", "taxaFrete", "cozinha" })
 public class Restaurante {
 

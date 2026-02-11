@@ -2,13 +2,13 @@ package com.ifood.domain.service;
 
 import com.ifood.domain.exception.EntityInUseException;
 import com.ifood.domain.exception.EntityNotFoundException;
+import com.ifood.domain.model.Cozinha;
 import com.ifood.domain.model.Restaurante;
+import com.ifood.domain.repository.CozinhaRepository;
 import com.ifood.domain.repository.RestauranteRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,24 +17,36 @@ import java.util.List;
 public class CadastroRestauranteService {
 
     @Autowired
-    private RestauranteRepository repository;
+    private RestauranteRepository restauranteRepository;
+
+    @Autowired
+    private CozinhaRepository cozinhaRepository;
 
     public List<Restaurante> listar() {
-        return repository.listar();
+        return restauranteRepository.listar();
     }
 
     public Restaurante buscar(long id) {
-         Restaurante restaurante = repository.buscar(id);
+         Restaurante restaurante = restauranteRepository.buscar(id);
          return restaurante;
     }
 
-    public void adicionar(Restaurante restaurante) {
-        repository.adicionar(restaurante);
+    public Restaurante adicionar(Restaurante restaurante) {
+        Long cozinhaId = restaurante.getCozinha().getId();
+        Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
+
+        if (cozinha == null) {
+            throw new EntityNotFoundException(String.format("Nao existe cadastro de cozinha com o codigo %d", cozinhaId));
+        }
+
+        restaurante.setCozinha(cozinha);
+
+        return restauranteRepository.adicionar(restaurante);
     }
 
     public void excluir(Long id) {
         try {
-            repository.buscar(id);
+            restauranteRepository.buscar(id);
 
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundException(

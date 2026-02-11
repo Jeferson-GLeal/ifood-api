@@ -2,7 +2,9 @@ package com.ifood.api.controller;
 
 import com.ifood.domain.exception.EntityInUseException;
 import com.ifood.domain.exception.EntityNotFoundException;
+import com.ifood.domain.model.Cozinha;
 import com.ifood.domain.model.Restaurante;
+import com.ifood.domain.repository.CozinhaRepository;
 import com.ifood.domain.service.CadastroRestauranteService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class RestauranteController {
     @Autowired
     private CadastroRestauranteService cadastro;
 
+    @Autowired
+    private CozinhaRepository repository;
+
     @GetMapping
     public List<Restaurante> listar() {
         return cadastro.listar();
@@ -31,8 +36,16 @@ public class RestauranteController {
     }
 
     @PostMapping
-    public void adicionar(@RequestBody Restaurante restaurante) {
-        cadastro.adicionar(restaurante);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<?> adicionar(@RequestBody Restaurante restaurante) {
+
+        try {
+            restaurante = cadastro.adicionar(restaurante);
+            return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
+
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
