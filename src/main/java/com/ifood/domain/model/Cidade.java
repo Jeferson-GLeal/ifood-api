@@ -1,7 +1,7 @@
 package com.ifood.domain.model;
 
 
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,9 +18,10 @@ public class Cidade {
 	
 	@Column(nullable = false)
 	private String nome;
-	
+
 	@ManyToOne
-	@JoinColumn(nullable = false)
+	@JsonBackReference
+	@JoinColumn(name = "estado_id", nullable = false)
 	private Estado estado;
 
 }
