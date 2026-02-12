@@ -2,6 +2,7 @@ package com.ifood.api.controller;
 
 import com.ifood.domain.model.Cidade;
 import com.ifood.domain.service.CadastroCidadeService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +35,16 @@ public class CidadesController {
     @PostMapping
     public void adicionar(@RequestBody Cidade cidade) {
         service.adicionar(cidade);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Cidade> atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
+        Cidade cidadeAtual = service.buscar(id);
+
+        if (cidadeAtual == null) {
+            return ResponseEntity.notFound().build();
+        }
+        BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(service.adicionar(cidadeAtual));
     }
 }
