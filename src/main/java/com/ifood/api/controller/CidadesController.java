@@ -5,9 +5,7 @@ import com.ifood.domain.service.CadastroCidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,5 +19,20 @@ public class CidadesController {
     @GetMapping
     public ResponseEntity<List<Cidade>> listar() {
         return ResponseEntity.status(HttpStatus.OK).body(service.listar());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Cidade> buscar(@PathVariable Long id) {
+        Cidade cidade = service.buscar(id);
+
+        if (cidade == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(cidade);
+    }
+
+    @PostMapping
+    public void adicionar(@RequestBody Cidade cidade) {
+        service.adicionar(cidade);
     }
 }

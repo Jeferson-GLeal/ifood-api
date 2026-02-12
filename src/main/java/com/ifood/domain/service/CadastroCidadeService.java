@@ -16,4 +16,15 @@ public class CadastroCidadeService {
     public List<Cidade> listar() {
         return repository.listar();
     }
+
+    public Cidade buscar(Long id) {
+        Cidade cidade = repository.buscar(id);
+        return cidade;
+    }
+
+    public Cidade adicionar(Cidade cidade) {
+        return repository.adicionar(cidade);
+    }
+
+
 }

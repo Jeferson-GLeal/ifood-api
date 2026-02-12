@@ -30,14 +30,14 @@ public class CidadeRepositoryImpl implements CidadeRepository {
 	
 	@Transactional
 	@Override
-	public Cidade salvar(Cidade cidade) {
+	public Cidade adicionar(Cidade cidade) {
 		return manager.merge(cidade);
 	}
 	
 	@Transactional
 	@Override
-	public void remover(Cidade cidade) {
-		cidade = buscar(cidade.getId());
+	public void remover(Long id) {
+		Cidade cidade = buscar(id);
 		manager.remove(cidade);
 	}
 
