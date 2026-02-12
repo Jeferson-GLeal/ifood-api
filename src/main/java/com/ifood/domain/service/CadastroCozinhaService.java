@@ -43,6 +43,4 @@ public class CadastroCozinhaService {
                     String.format("Cozinha de codigo %d nao pode ser removida, pois esta em uso!", cozinhaId));
         }
     }
-
-
 }

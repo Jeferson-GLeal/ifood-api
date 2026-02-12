@@ -19,7 +19,6 @@ public class CozinhaController {
 	@Autowired
 	private CadastroCozinhaService cadastro;
 
-	@ResponseStatus(HttpStatus.OK)
 	@GetMapping
 	public ResponseEntity<List<Cozinha>> listar() {
 		return ResponseEntity.status(HttpStatus.OK).body(cadastro.listar());
@@ -29,19 +28,19 @@ public class CozinhaController {
 	public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaId) {
 		Cozinha cozinha = cadastro.buscar(cozinhaId);
 
-		if (cozinha != null) {
-			return ResponseEntity.status(HttpStatus.OK).body(cozinha);
+		if (cozinha == null) {
+			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.status(HttpStatus.OK).body(cozinha);
 	}
 
 	@PostMapping
-	public void adicionar(@RequestBody	 Cozinha cozinha) {
+	public void adicionar(@RequestBody Cozinha cozinha) {
 		cadastro.adicionar(cozinha);
 	}
 
 	@PutMapping("/{cozinhaId}")
-	public ResponseEntity<Cozinha> atualizar(@PathVariable long cozinhaId, @RequestBody Cozinha cozinha) {
+	public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
 		Cozinha cozinhaAtual = cadastro.buscar(cozinhaId);
 
 		if (cozinhaAtual == null) {
@@ -55,7 +54,6 @@ public class CozinhaController {
 
 	@DeleteMapping("/{cozinhaId}")
 	public ResponseEntity<Cozinha> excluir(@PathVariable Long cozinhaId) {
-
 		try {
 			cadastro.excluir(cozinhaId);
 			return ResponseEntity.noContent().build();
