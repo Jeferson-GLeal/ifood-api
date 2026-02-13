@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -48,12 +49,32 @@ public class RestauranteController {
     @PutMapping("/{id}")
     public ResponseEntity<Restaurante> atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
         Restaurante restauranteAtual = cadastro.buscar(id);
-        if (restauranteAtual != null) {
-            BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
-            cadastro.adicionar(restauranteAtual);
-            return ResponseEntity.noContent().build();
+        if (restauranteAtual == null) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+
+        BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
+        cadastro.adicionar(restauranteAtual);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Restaurante> atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos) {
+        Restaurante restauranteAtual = cadastro.buscar(id);
+
+        if (restauranteAtual == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Merge(campos, restauranteAtual);
+
+        return atualizar(id, restauranteAtual);
+    }
+
+    private static void Merge(Map<String, Object> campos, Restaurante restauranteDestino) {
+        campos.forEach((nomePropriedade, valorPropriedade) -> {
+                    System.out.println(nomePropriedade + " = " + valorPropriedade);
+                });
     }
 
     @DeleteMapping("/{id}")
