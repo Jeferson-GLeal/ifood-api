@@ -1,20 +1,25 @@
 package com.ifood.api.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ifood.domain.exception.EntityInUseException;
 import com.ifood.domain.exception.EntityNotFoundException;
 import com.ifood.domain.model.Cozinha;
 import com.ifood.domain.model.Restaurante;
 import com.ifood.domain.repository.CozinhaRepository;
 import com.ifood.domain.service.CadastroRestauranteService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/restaurantes")
 public class RestauranteController {
@@ -28,9 +33,13 @@ public class RestauranteController {
     }
 
     @GetMapping("/{id}")
-    public Restaurante buscar(@PathVariable Long id) {
+    public ResponseEntity<Restaurante> buscar(@PathVariable Long id) {
         Restaurante restaurante = cadastro.buscar(id);
-        return restaurante;
+        if (restaurante == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(restaurante);
     }
 
     @PostMapping
@@ -71,9 +80,20 @@ public class RestauranteController {
         return atualizar(id, restauranteAtual);
     }
 
-    private static void Merge(Map<String, Object> campos, Restaurante restauranteDestino) {
-        campos.forEach((nomePropriedade, valorPropriedade) -> {
-                    System.out.println(nomePropriedade + " = " + valorPropriedade);
+    private static void Merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Restaurante restauranteOrigem = objectMapper.convertValue(dadosOrigem, Restaurante.class);
+
+        System.out.println(restauranteOrigem);
+
+        dadosOrigem.forEach((nomePropriedade, valorPropriedade) -> {
+            Field field = ReflectionUtils.findField(Restaurante.class, nomePropriedade);
+            field.setAccessible(true);
+
+            Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
+
+                    System.out.println(nomePropriedade + " = " + valorPropriedade + " = " + novoValor);
+                    ReflectionUtils.setField(field, restauranteDestino, novoValor);
                 });
     }
 
