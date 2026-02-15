@@ -14,11 +14,11 @@ import java.util.List;
 @RequestMapping("/teste")
 public class TesteController {
 
-    @Autowired
+/*    @Autowired
     private CozinhaRepository repository;
 
     @GetMapping("/cozinhas/por-nome")
     public List<Cozinha> cozinhasPorNome(@RequestParam("nome") String nome) {
         return repository.consultarPorNome(nome);
-    }
+    }*/
 }

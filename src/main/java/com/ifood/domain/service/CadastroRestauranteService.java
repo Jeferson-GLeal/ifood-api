@@ -8,10 +8,7 @@ import com.ifood.domain.repository.CozinhaRepository;
 import com.ifood.domain.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class CadastroRestauranteService {
@@ -22,35 +19,24 @@ public class CadastroRestauranteService {
     @Autowired
     private CozinhaRepository cozinhaRepository;
 
-    public List<Restaurante> listar() {
-        return restauranteRepository.listar();
-    }
-
-    public Restaurante buscar(long id) {
-         Restaurante restaurante = restauranteRepository.buscar(id);
-         return restaurante;
-    }
-
-    public Restaurante adicionar(Restaurante restaurante) {
+    public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
-        Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
-
-        if (cozinha == null) {
-            throw new EntityNotFoundException(String.format("Nao existe cadastro de cozinha com o codigo %d", cozinhaId));
-        }
+        Cozinha cozinha = cozinhaRepository.findById(cozinhaId)
+                .orElseThrow(()-> new EntityNotFoundException(String.format("Nao existe cadastro de cozinha com o codigo %d", cozinhaId)));
 
         restaurante.setCozinha(cozinha);
 
-        return restauranteRepository.adicionar(restaurante);
+        return restauranteRepository.save(restaurante);
     }
 
     public void excluir(Long id) {
-        try {
-            restauranteRepository.buscar(id);
+        Restaurante restaurante = restauranteRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException(String.format("Não existe um cadastro de Restaurante com código %d", id)
+                ));
 
-        } catch (EmptyResultDataAccessException e) {
-            throw new EntityNotFoundException(
-                    String.format("Cadastro de Restaurante de codigo %d inexistente", id));
+        try {
+            restauranteRepository.deleteById(id);
 
         } catch (DataIntegrityViolationException e) {
             throw new EntityInUseException(
