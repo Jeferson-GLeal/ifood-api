@@ -1,14 +1,7 @@
 package com.ifood.domain.repository;
 
-import java.util.List;
-
 import com.ifood.domain.model.Cidade;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CidadeRepository {
-
-	List<Cidade> listar();
-	Cidade buscar(Long id);
-	Cidade adicionar(Cidade cidade);
-	void remover(Long id);
-	
+public interface CidadeRepository extends JpaRepository<Cidade, Long> {
 }

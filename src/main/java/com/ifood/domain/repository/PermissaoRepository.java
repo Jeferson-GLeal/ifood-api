@@ -1,14 +1,8 @@
 package com.ifood.domain.repository;
 
-import java.util.List;
-
 import com.ifood.domain.model.Permissao;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PermissaoRepository {
+public interface PermissaoRepository extends JpaRepository<Permissao, Long> {
 
-	List<Permissao> listar();
-	Permissao buscar(Long id);
-	Permissao salvar(Permissao permissao);
-	void remover(Permissao permissao);
-	
 }

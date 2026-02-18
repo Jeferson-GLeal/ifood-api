@@ -6,36 +6,39 @@ import com.ifood.domain.model.Estado;
 import com.ifood.domain.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CadastroEstadosService {
 
     @Autowired
-    private EstadoRepository estadoRepository;
+    private EstadoRepository repository;
 
     public List<Estado> listar() {
-        return estadoRepository.listar();
+        return repository.findAll();
     }
 
     public Estado buscar(Long id) {
-        return estadoRepository.buscar(id);
+        Optional<Estado> estado = repository.findById(id);
+        return estado.get();
     }
 
-    public Estado adicionar(Estado estado) {
-        return estadoRepository.adicionar(estado);
+    public Estado salvar(Estado estado) {
+        return repository.save(estado);
     }
 
     public void excluir(Long id) {
-        try {
-            estadoRepository.remover(id);
+        repository.findById(id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                String.format("Cacastro de Estado com o codigo %d inexistente!", id)
+                        ));
 
-        } catch (EmptyResultDataAccessException e) {
-            throw new EntityNotFoundException(
-                    String.format("Cacastro de Estado com o codigo %d inexistente!", id));
+        try {
+            repository.deleteById(id);
 
         } catch (DataIntegrityViolationException e) {
             throw new EntityInUseException(

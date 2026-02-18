@@ -1,12 +1,13 @@
 package com.ifood.domain.model;
 
 
-
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Cozinha {

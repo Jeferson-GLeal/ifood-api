@@ -10,14 +10,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CadastroRestauranteService {
 
     @Autowired
-    private RestauranteRepository restauranteRepository;
+    private RestauranteRepository repository;
 
     @Autowired
     private CozinhaRepository cozinhaRepository;
+
+    public List<Restaurante> listar() {
+        return repository.findAll();
+    }
+
+    public Restaurante buscar(Long id) {
+        Optional<Restaurante> restaurante = repository.findById(id);
+        return restaurante.get();
+    }
 
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
@@ -26,18 +38,18 @@ public class CadastroRestauranteService {
 
         restaurante.setCozinha(cozinha);
 
-        return restauranteRepository.save(restaurante);
+        return repository.save(restaurante);
     }
 
     public void excluir(Long id) {
-        Restaurante restaurante = restauranteRepository.findById(id)
+        repository.findById(id)
                 .orElseThrow(() ->
-                        new EntityNotFoundException(String.format("Não existe um cadastro de Restaurante com código %d", id)
+                        new EntityNotFoundException(
+                                String.format("Não existe um cadastro de Restaurante com código %d", id)
                 ));
 
         try {
-            restauranteRepository.deleteById(id);
-
+            repository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
             throw new EntityInUseException(
                     String.format("Restaurante de codigo %d nao pode ser removido, pois esta em uso!", id));

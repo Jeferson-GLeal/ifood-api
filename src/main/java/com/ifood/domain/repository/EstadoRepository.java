@@ -1,14 +1,8 @@
 package com.ifood.domain.repository;
 
-import java.util.List;
-
 import com.ifood.domain.model.Estado;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface EstadoRepository {
+public interface EstadoRepository extends JpaRepository<Estado, Long> {
 
-	List<Estado> listar();
-	Estado buscar(Long id);
-	Estado adicionar(Estado estado);
-	void remover(Long id);
-	
 }
