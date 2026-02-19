@@ -19,7 +19,7 @@ public class TesteController {
 
     @GetMapping("/cozinhas/por-nome")
     public List<Cozinha> cozinhasPorNome(String nome) {
-        return cozinhaRepository.findTodasByNome(nome);
+        return cozinhaRepository.findTodasByNomeContaining(nome);
     }
 
     @GetMapping("/cozinhas/unica-por-nome")
