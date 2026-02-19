@@ -39,6 +39,8 @@ public class TesteController {
         return repository.findByTaxaFreteBetween(taxaInicial, taxaFinal);
     }
 
-
-
+    @GetMapping("/restaurantes/por-nome")
+    public List<Restaurante> restaurantePorNome(String nome, Cozinha cozinhaId) {
+        return repository.findByNomeContaining(nome, cozinhaId);
+    }
 }
