@@ -49,4 +49,9 @@ public class TesteController {
         return repository.findFirstRestauranteByNomeContaining(nome);
     }
 
+    @GetMapping("/restaurantes/top2-nome")
+    public List<Restaurante> restauranteTop2Nome(String nome) {
+        return repository.findTop2ByNomeContaining(nome);
+    }
+
 }
