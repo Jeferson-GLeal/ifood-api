@@ -34,6 +34,11 @@ public class TesteController {
         return cozinhaRepository.findByNome(nome);
     }
 
+    @GetMapping("/cozinhas/exists")
+    public boolean cozinhaExistePorNome(String nome) {
+        return cozinhaRepository.existsByNome(nome);
+    }
+
     @GetMapping("/restaurantes/por-taxa-frete")
     public List<Restaurante> restaurantePorTaxaFrete(BigDecimal taxaInicial, BigDecimal taxaFinal) {
         return repository.findByTaxaFreteBetween(taxaInicial, taxaFinal);
