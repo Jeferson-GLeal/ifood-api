@@ -59,4 +59,8 @@ public class TesteController {
         return repository.findTop2ByNomeContaining(nome);
     }
 
+    @GetMapping("/restaurantes/count")
+    public int restaurantCountCozinha(Long cozinhaId) {
+        return repository.countByCozinhaId(cozinhaId);
+    }
 }
