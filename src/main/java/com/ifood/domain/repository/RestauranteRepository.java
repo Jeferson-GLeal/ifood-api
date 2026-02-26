@@ -2,7 +2,6 @@ package com.ifood.domain.repository;
 
 import com.ifood.domain.model.Restaurante;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
@@ -23,4 +22,6 @@ public interface RestauranteRepository extends JpaRepository<Restaurante, Long> 
     List<Restaurante> findTop2ByNomeContaining(String nome);
 
     int countByCozinhaId(Long cozinhaId);
+
+    List<Restaurante> find(String nome, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal);
 }
