@@ -2,6 +2,7 @@ package com.ifood.infrastructure.repository;
 
 
 import com.ifood.domain.model.Restaurante;
+import com.ifood.domain.repository.RestauranteRepositoryQueries;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
-public class RestauranteRepositoryImpl {
+public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 
     @PersistenceContext
     private EntityManager manager;
