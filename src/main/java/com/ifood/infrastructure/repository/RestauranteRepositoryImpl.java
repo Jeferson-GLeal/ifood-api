@@ -27,11 +27,12 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
     public List<Restaurante> find(String nome,
                                   BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal) {
 
-        CriteriaBuilder builder = manager.getCriteriaBuilder();
-        CriteriaQuery<Restaurante> criteria = builder.createQuery(Restaurante.class);
-        Root<Restaurante> root = criteria.from(Restaurante.class);
+        var builder = manager.getCriteriaBuilder();
 
-        var predicates = new ArrayList<>();
+        var criteria = builder.createQuery(Restaurante.class);
+        var root = criteria.from(Restaurante.class);
+
+        var predicates = new ArrayList<Predicate>();
 
         if (StringUtils.hasText(nome)) {
             predicates.add(builder.like(root.get("nome"), "%" + nome + "%"));
@@ -42,13 +43,12 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
         }
 
         if (taxaFreteFinal != null) {
-            predicates.add(builder.lessThanOrEqualTo(root.get("taxaFrete" ), taxaFreteFinal));
+            predicates.add(builder.lessThanOrEqualTo(root.get("taxaFrete"), taxaFreteFinal));
         }
 
         criteria.where(predicates.toArray(new Predicate[0]));
 
-        TypedQuery<Restaurante> query =  manager.createQuery(criteria);
-
+        var query = manager.createQuery(criteria);
         return query.getResultList();
     }
 }
