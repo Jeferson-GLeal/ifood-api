@@ -3,9 +3,8 @@ package com.ifood.api.controller;
 import com.ifood.domain.model.Cozinha;
 import com.ifood.domain.model.Restaurante;
 import com.ifood.domain.repository.CozinhaRepository;
+import com.ifood.infrastructure.repository.spec.RestauranteSpecs.*;
 import com.ifood.domain.repository.RestauranteRepository;
-import com.ifood.infrastructure.repository.spec.RestauranteComFreteGratisSpec;
-import com.ifood.infrastructure.repository.spec.RestauranteComNomeSemelhanteSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+
+import static com.ifood.infrastructure.repository.spec.RestauranteSpecs.comFreteGratis;
+import static com.ifood.infrastructure.repository.spec.RestauranteSpecs.comNomeSemelhante;
 
 @RestController
 @RequestMapping("/teste")
@@ -74,9 +76,7 @@ public class TesteController {
 
     @GetMapping("/restaurantes/com-frete-gratis")
     public List<Restaurante> restaurantesComFreteGratis(String nome) {
-        var comFreteGratis = new RestauranteComFreteGratisSpec();
-        var comNomeSemelhante = new RestauranteComNomeSemelhanteSpec(nome);
 
-        return repository.findAll(comFreteGratis.and(comNomeSemelhante));
+        return repository.findAll(comFreteGratis().and(comNomeSemelhante(nome)));
     }
 }
